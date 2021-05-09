@@ -4,6 +4,8 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import FormControl from "react-bootstrap/FormControl";
+import ListGroup from "react-bootstrap/ListGroup";
+import ListGroupItem from "react-bootstrap/ListGroupItem";
 import React from "react";
 
 function EmployeesPage() {
@@ -34,6 +36,7 @@ function GetEmployeeCard() {
         <FormControl type="text" placeholder="Search by id" className="mr-sm-2" />
         <Button variant="outline-success">Search</Button>
       </Form>
+      <br />
       <Request method='GET' url="https://localhost:5001/Employee/2" />
     </div>
   );
@@ -122,9 +125,16 @@ class Request extends React.Component {
       return <div>Loading...</div>;
     } else {
       return (
-        <p>
-          {this.state.id}, {this.state.firstName}, {this.state.lastName}
-        </p>
+        <div>
+          <ListGroup as="ul">
+            <ListGroup.Item as="li">
+              First name: {this.state.firstName}
+              </ListGroup.Item>
+            <ListGroup.Item as="li">
+              Last name: {this.state.lastName}
+            </ListGroup.Item>
+          </ListGroup>
+        </div >
       );
     }
   }
