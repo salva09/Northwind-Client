@@ -4,6 +4,7 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import FormControl from "react-bootstrap/FormControl";
+import React from "react";
 
 function EmployeesPage() {
   return (
@@ -11,7 +12,7 @@ function EmployeesPage() {
       <Jumbotron>
         <h1>Employees API testing</h1>
         <p>
-          In this page we can test the API designed to manipulate 
+          In this page we can test the API designed to manipulate
           the employees table in the Northwind database.
         </p>
       </Jumbotron>
@@ -24,29 +25,17 @@ function EmployeesPage() {
   );
 }
 
-function CreateCard(key, card_title, body_content) {
-  return (
-    <Card>
-      <Card.Header>
-        <Accordion.Toggle as={Button} variant="link" eventKey={key}>
-          {card_title}
-        </Accordion.Toggle>
-      </Card.Header>
-      <Accordion.Collapse eventKey={key}>
-        <Card.Body>{body_content}</Card.Body>
-      </Accordion.Collapse>
-    </Card>
-  );
-}
-
 function GetEmployeeCard() {
   return CreateCard(
     1,
     "See employee information",
-    <Form inline>
-      <FormControl type="text" placeholder="Search by id" className="mr-sm-2" />
-      <Button variant="outline-success">Search</Button>
-    </Form>
+    <div>
+      <Form inline>
+        <FormControl type="text" placeholder="Search by id" className="mr-sm-2" />
+        <Button variant="outline-success">Search</Button>
+      </Form>
+      <Request method='GET' url="https://localhost:5001/Employee/1" />
+    </div>
   );
 }
 
@@ -67,6 +56,75 @@ function DeleteEmployeeCard() {
       <Button variant="outline-success">Search</Button>
     </Form>
   );
+}
+
+function CreateCard(key, card_title, body_content) {
+  return (
+    <Card>
+      <Card.Header>
+        <Accordion.Toggle as={Button} variant="link" eventKey={key}>
+          {card_title}
+        </Accordion.Toggle>
+      </Card.Header>
+      <Accordion.Collapse eventKey={key}>
+        <Card.Body>{body_content}</Card.Body>
+      </Accordion.Collapse>
+    </Card>
+  );
+}
+
+class Request extends React.Component {
+  constructor(props) {
+    super(props);
+    this.requestOptions = {
+      method: props.method,
+      redirect: 'follow'
+    };
+    this.state = {
+      error: null,
+      isLoaded: false,
+      id: 0
+    };
+  }
+
+  componentDidMount() {
+    fetch(props.url, this.requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        console.log(result);
+        this.setState({
+          isLoaded: true,
+          id: result.id
+        });
+      })
+      .catch(error => {
+        console.log('error', error);
+        this.setState({
+          isLoaded: true,
+          error
+        });
+      });
+  }
+
+  render() {
+    const { error, isLoaded, id } = this.state;
+    if (error) {
+      return <div>Error: {error.message}</div>;
+    } else if (!isLoaded) {
+      return <div>Loading...</div>;
+    } else {
+      return (
+        <p>
+          {id}
+        </p>
+      );
+    }
+  }
+}
+
+Request.defaultProps = {
+  method: null,
+  url: null
 }
 
 export default EmployeesPage;
