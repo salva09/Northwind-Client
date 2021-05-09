@@ -1,13 +1,7 @@
-import Jumbotron from "react-bootstrap/Jumbotron";
-import Accordion from "react-bootstrap/Accordion";
-import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import FormControl from "react-bootstrap/FormControl";
-import ListGroup from "react-bootstrap/ListGroup";
-import ListGroupItem from "react-bootstrap/ListGroupItem";
 import React from "react";
-import { render } from "react-dom";
 
 import CreateCard from "../CreateCard";
 
