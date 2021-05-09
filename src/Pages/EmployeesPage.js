@@ -88,7 +88,7 @@ class Request extends React.Component {
   }
 
   componentDidMount() {
-    fetch(props.url, this.requestOptions)
+    fetch(this.props.url, this.requestOptions)
       .then(response => response.text())
       .then(result => {
         console.log(result);
