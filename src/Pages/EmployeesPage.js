@@ -4,9 +4,10 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import FormControl from "react-bootstrap/FormControl";
-import ListGroup from "react-bootstrap/ListGroup";
-import ListGroupItem from "react-bootstrap/ListGroupItem";
-import React from "react";
+
+import GetEmployee from "./employees/GetEmployee";
+import DeleteEmployee from "./employees/DeleteEmployee"
+import PostEmployee from "./employees/PostEmployee"
 
 function EmployeesPage() {
   return (
@@ -19,130 +20,12 @@ function EmployeesPage() {
         </p>
       </Jumbotron>
       <Accordion>
-        <GetEmployeeCard />
-        <PutEmployeeCard />
-        <DeleteEmployeeCard />
+        <GetEmployee />
+        <PostEmployee />
+        <DeleteEmployee />
       </Accordion>
     </div>
   );
-}
-
-function GetEmployeeCard() {
-  return CreateCard(
-    1,
-    "See employee information",
-    <div>
-      <Form inline>
-        <FormControl type="text" placeholder="Search by id" className="mr-sm-2" />
-        <Button variant="outline-success">Search</Button>
-      </Form>
-      <br />
-      <Request method='GET' url="https://localhost:5001/Employee/2" />
-    </div>
-  );
-}
-
-function PutEmployeeCard() {
-  return CreateCard(
-    2,
-    "Add new employee",
-    <Button variant="outline-success">Add</Button>
-  );
-}
-
-function DeleteEmployeeCard() {
-  return CreateCard(
-    3,
-    "Remove an employee",
-    <Form inline>
-      <FormControl type="text" placeholder="Search by id" className="mr-sm-2" />
-      <Button variant="outline-success">Search</Button>
-    </Form>
-  );
-}
-
-function CreateCard(key, card_title, body_content) {
-  return (
-    <Card>
-      <Card.Header>
-        <Accordion.Toggle as={Button} variant="link" eventKey={key}>
-          {card_title}
-        </Accordion.Toggle>
-      </Card.Header>
-      <Accordion.Collapse eventKey={key}>
-        <Card.Body>{body_content}</Card.Body>
-      </Accordion.Collapse>
-    </Card>
-  );
-}
-
-class Request extends React.Component {
-  constructor(props) {
-    super(props);
-    this.requestOptions = {
-      method: props.method,
-      redirect: 'follow',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    };
-    this.state = {
-      id: 0,
-      firstName: null,
-      lastName: null,
-      error: null,
-      isLoaded: false,
-    };
-  }
-
-  componentDidMount() {
-    fetch(this.props.url, this.requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        console.log(result);
-        this.setState({
-          id: result.id,
-          firstName: result.firstName,
-          lastName: result.lastName,
-          isLoaded: true
-        });
-      })
-      .catch(error => {
-        console.log('error', error);
-        this.setState({
-          isLoaded: true,
-          error
-        });
-      });
-  }
-
-  render() {
-    const { error, isLoaded } = this.state;
-    if (error) {
-      return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
-      return <div>Loading...</div>;
-    } else {
-      return (
-        <div>
-          <ListGroup as="ul">
-            <ListGroup.Item as="li">
-              First name: {this.state.firstName}
-              </ListGroup.Item>
-            <ListGroup.Item as="li">
-              Last name: {this.state.lastName}
-            </ListGroup.Item>
-          </ListGroup>
-        </div >
-      );
-    }
-  }
-}
-
-Request.defaultProps = {
-  method: null,
-  url: null
 }
 
 export default EmployeesPage;
