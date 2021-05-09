@@ -34,7 +34,7 @@ function GetEmployeeCard() {
         <FormControl type="text" placeholder="Search by id" className="mr-sm-2" />
         <Button variant="outline-success">Search</Button>
       </Form>
-      <Request method='GET' url="https://localhost:5001/Employee/1" />
+      <Request method='GET' url="https://localhost:5001/Employee/2" />
     </div>
   );
 }
@@ -78,32 +78,32 @@ class Request extends React.Component {
     super(props);
     this.requestOptions = {
       method: props.method,
-      redirect: 'follow'
+      redirect: 'follow',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      },
     };
     this.state = {
+      id: 0,
+      firstName: null,
+      lastName: null,
       error: null,
       isLoaded: false,
     };
-    this.res = {
-      id: 0,
-      firstName: null,
-      lastName: null
-    }
   }
 
   componentDidMount() {
     fetch(this.props.url, this.requestOptions)
-      .then(response => response.text())
+      .then(response => response.json())
       .then(result => {
         console.log(result);
         this.setState({
-          isLoaded: true
-        });
-        this.res = {
           id: result.id,
           firstName: result.firstName,
-          lastName: result.lastName
-        }
+          lastName: result.lastName,
+          isLoaded: true
+        });
       })
       .catch(error => {
         console.log('error', error);
@@ -115,7 +115,7 @@ class Request extends React.Component {
   }
 
   render() {
-    const { error, isLoaded} = this.state;
+    const { error, isLoaded } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -123,7 +123,7 @@ class Request extends React.Component {
     } else {
       return (
         <p>
-          {this.res.id}
+          {this.state.id}, {this.state.firstName}, {this.state.lastName}
         </p>
       );
     }
