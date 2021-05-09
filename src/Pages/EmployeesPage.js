@@ -123,7 +123,7 @@ class Request extends React.Component {
     } else {
       return (
         <p>
-          {id}
+          {this.res.id}
         </p>
       );
     }
