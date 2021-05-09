@@ -83,8 +83,12 @@ class Request extends React.Component {
     this.state = {
       error: null,
       isLoaded: false,
-      id: 0
     };
+    this.res = {
+      id: 0,
+      firstName: null,
+      lastName: null
+    }
   }
 
   componentDidMount() {
@@ -93,9 +97,13 @@ class Request extends React.Component {
       .then(result => {
         console.log(result);
         this.setState({
-          isLoaded: true,
-          id: result.id
+          isLoaded: true
         });
+        this.res = {
+          id: result.id,
+          firstName: result.firstName,
+          lastName: result.lastName
+        }
       })
       .catch(error => {
         console.log('error', error);
@@ -107,7 +115,7 @@ class Request extends React.Component {
   }
 
   render() {
-    const { error, isLoaded, id } = this.state;
+    const { error, isLoaded} = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
