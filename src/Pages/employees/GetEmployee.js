@@ -9,7 +9,7 @@ import ListGroupItem from "react-bootstrap/ListGroupItem";
 import React from "react";
 import { render } from "react-dom";
 
-import CreateCard from "./CreateCard";
+import CreateCard from "../CreateCard";
 
 class GetEmployee extends React.Component {
   url = "https://localhost:5001/Employee/";
